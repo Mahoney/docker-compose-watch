@@ -13,5 +13,6 @@ Known weaknesses:
 * All services will have their contexts sent to the docker daemon - it should
   be possible I think to limit this by knowing which service's context got
   changed...
+* Depends on `fswatch`, you'll need to install that manually
 
 Contributions / criticism welcome.
