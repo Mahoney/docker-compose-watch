@@ -5,6 +5,9 @@ This is a drop in script to replace `docker-compose`/`docker compose`. Put it
 somewhere in your path (`/usr/local/bin` or something) where it will win. It
 delegates to `docker compose`.
 
+Run `docker-compose up --build --watch` and then when you edit files in that
+directory the relevant images will be built & containers recreated.
+
 Known weaknesses:
 * It just uses pwd rather than parsing the yaml to decide which contexts to use
 * It’s pretty inefficient because it doesn’t know about `.dockerignore` - so a
