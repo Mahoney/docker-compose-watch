@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+args=( "$@" )
+
+containsElement () {
+  local e match="$1"
+  shift
+  for e; do [[ "$e" == "$match" ]] && return 0; done
+  return 1
+}
+
+daemon() {
+  fswatch -o "$(pwd)" --event Created --event Updated --event Removed |
+    while read -r _; do
+      updateCompose "$@"
+    done
+}
+
+updateCompose() {
+  if containsElement "-d" "$@" || containsElement "--detach" "$@"; then
+    docker compose "$@"
+  else
+    docker compose "$@" -d
+  fi
+}
+
+if containsElement "up" "${args[@]}" && containsElement "--build" "${args[@]}" && containsElement "--watch" "${args[@]}"; then
+  to_remove='--watch'
+  for i in "${!args[@]}"; do
+    if [[ ${args[i]} = "$to_remove" ]]; then
+      unset 'args[i]'
+    fi
+  done
+  daemon "${args[@]}" &
+fi
+
+docker compose "${args[@]}"
