@@ -35,17 +35,16 @@ restarted.
   changed...
 
 ## TO DO
-1. Handle `-f` links to dockerfiles - including multiple of them
-2. Use a cli yaml parser to read the `services.<service_name>.build.context`
-   from each of these - remember `context` may not be present in which case I 
-   think it is defaulted to `.`. The context will likely be a relative path - 
-   need to investigate exactly how that path is resolved, particularly when 
-   the dockerfiles are in different directories, and in different directories to
-   the one in which `docker-compose` is being run. Might even depend on which
-   dockerfile is referenced first... test it!
-3. Listen to all of those context directories - should be possible in a single
+1. Handle `-f` links to dockerfiles - including multiple of them. Also handle
+   `docker-compose.override.yml`.
+2. Use a cli yaml parser to read the `services.<service_name>.build` or 
+   `services.<service_name>.build.context` from each service in each of these
+   (depending on whether it's a string or an object) The context will likely 
+   be a relative path - if it is, it must be 
+   [resolved relative to the first -f compose file](https://docs.docker.com/compose/extends/#understanding-multiple-compose-files)
+4. Listen to all of those context directories - should be possible in a single
    `fswatch` subprocess.
-4. On change, work out which service(s) context(s) the change was in, and pass
+5. On change, work out which service(s) context(s) the change was in, and pass
    their names to `docker compose up`:
    `docker compose up -d --build <service1> <service2> ...`
 
