@@ -1,3 +1,8 @@
 fun main(args: Array<String>) {
-  println("Hello world ${args.joinToString(" ")}")
+  val app = build()
+  app.execute(args)
 }
+
+private fun build() = App(
+  DockerComposeShellRunner()
+)
