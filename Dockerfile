@@ -28,6 +28,7 @@ RUN ./gradlew --version
 
 COPY --chown=$username . .
 RUN --mount=type=cache,target=/home/$username/.gradle/caches,gid=$gid,uid=$uid \
+    --mount=type=cache,target=/home/$username/.konan,gid=$gid,uid=$uid \
     ./gradlew --no-watch-fs --stacktrace build
 RUN ls -lAh $work_dir/build/bin/native/releaseExecutable
 
