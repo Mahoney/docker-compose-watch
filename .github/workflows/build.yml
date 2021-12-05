@@ -48,6 +48,7 @@ jobs:
           -o build
 
       - name: Backup docker
+        if: always()
         run: .github/actions/docker-cache/backup.sh ${{ runner.temp }}/docker_cache/cache.tar
 
       - uses: actions/upload-artifact@v1

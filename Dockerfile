@@ -34,4 +34,4 @@ RUN ls -lAh $work_dir/build/bin/native/releaseExecutable
 FROM scratch
 ARG work_dir
 
-COPY --from=worker $work_dir/build/bin/native/releaseExecutable/docker-compose-watch.kexe /
+COPY --from=worker $work_dir/build/bin/native/releaseExecutable/docker-compose-watch.kexe /docker-compose
