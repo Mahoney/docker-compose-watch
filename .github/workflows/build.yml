@@ -51,6 +51,10 @@ jobs:
         if: always()
         run: .github/actions/docker-cache/backup.sh ${{ runner.temp }}/docker_cache/cache.tar
 
+      - name: Preserve permissions
+        working-directory: build
+        run: tar -cvf docker-compose-watch-linuxX64-glibc.tar docker-compose
+
       - uses: actions/upload-artifact@v2
         with:
           name: docker-compose linuxX64-glibc
@@ -87,6 +91,12 @@ jobs:
           --no-watch-fs 
           --stacktrace 
           build
+
+      - name: Preserve permissions
+        working-directory: build
+        run: |
+          mv bin/native/releaseExecutable/docker-compose-watch.kexe docker-compose
+          tar -cvf docker-compose-watch-macosX64.tar docker-compose
 
       - uses: actions/upload-artifact@v2
         with:
