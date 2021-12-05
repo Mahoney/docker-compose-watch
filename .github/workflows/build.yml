@@ -53,6 +53,7 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
+          name: docker-compose linuxX64-glibc
           path: build/docker-compose
 
   macOs-x64-build:
@@ -89,5 +90,5 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: docker-compose
+          name: docker-compose macosX64
           path: build/bin/native/releaseExecutable/docker-compose-watch.kexe
