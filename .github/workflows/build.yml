@@ -1,0 +1,85 @@
+name: Docker Compose Watch CI Build
+
+on:
+  push:
+    branches-ignore:
+      - 'abandoned-*'
+  schedule:
+    # Daily at 2AM
+    # * is a special character in YAML so you have to quote this string
+    - cron: '0 2 * * *'
+
+env:
+  DOCKER_BUILDKIT: 1
+  BUILDKIT_PROGRESS: plain
+  PROGRESS_NO_TRUNC: 1
+  cache-name: docker-cache-1
+
+jobs:
+  ubuntu-build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+
+      - name: Cache docker
+        uses: actions/cache@v2
+        with:
+          path: ${{ runner.temp }}/docker_cache
+          # Always want a cache miss on the first build of the day, which should be the scheduled
+          # overnight one. Proves the build works from scratch, and gives you a nice clean cache to
+          # work with each day.
+          key: ${{ env.cache-name }}_${{ steps.date.outputs.date }}-${{ github.ref }}-${{ github.run_number }}
+          restore-keys: |
+            ${{ env.cache-name }}_${{ steps.date.outputs.date }}-${{ github.ref }}-
+            ${{ env.cache-name }}_${{ steps.date.outputs.date }}-
+
+      - name: Restore docker
+        run: .github/actions/docker-cache/restore.sh ${{ runner.temp }}/docker_cache/cache.tar
+
+      - name: Do the build
+        run: >-
+          docker build . 
+          -o build
+
+      - name: Archive reports
+        uses: actions/upload-artifact@v1
+        with:
+          name: build-reports
+          path: builds/${{ github.sha }}-${{ github.run_number }}/build-reports
+
+      - name: Backup docker
+        run: .github/actions/docker-cache/backup.sh ${{ runner.temp }}/docker_cache/cache.tar
+
+  macOs-x64-build:
+    runs-on: macos-10.15
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+
+      - name: Cache gradle
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          # Always want a cache miss on the first build of the day, which should be the scheduled
+          # overnight one. Proves the build works from scratch, and gives you a nice clean cache to
+          # work with each day.
+          key: ${{ env.cache-name }}_${{ steps.date.outputs.date }}-${{ github.ref }}-${{ github.run_number }}
+          restore-keys: |
+            ${{ env.cache-name }}_${{ steps.date.outputs.date }}-${{ github.ref }}-
+            ${{ env.cache-name }}_${{ steps.date.outputs.date }}-
+
+      - name: Do the build
+        run: >-
+          ./gradlew 
+          --no-watch-fs 
+          --stacktrace 
+          build
