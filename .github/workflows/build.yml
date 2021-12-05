@@ -58,7 +58,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: docker-compose linuxX64-glibc
-          path: build/docker-compose
+          path: build/docker-compose-watch-linuxX64-glibc.tar
 
   macOs-x64-build:
     runs-on: macos-10.15
@@ -101,4 +101,4 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: docker-compose macosX64
-          path: build/bin/native/releaseExecutable/docker-compose-watch.kexe
+          path: build/docker-compose-watch-macosX64.tar
