@@ -14,6 +14,7 @@ env:
   BUILDKIT_PROGRESS: plain
   PROGRESS_NO_TRUNC: 1
   cache-name: docker-cache-1
+  GRADLE_OPTS: -Dorg.gradle.daemon=false
 
 jobs:
   ubuntu-build:
@@ -55,6 +56,11 @@ jobs:
       - name: Backup docker
         run: .github/actions/docker-cache/backup.sh ${{ runner.temp }}/docker_cache/cache.tar
 
+      - uses: actions/upload-artifact@v1
+        with:
+          name: docker-compose
+          path: build/docker-compose
+
   macOs-x64-build:
     runs-on: macos-10.15
 
@@ -83,3 +89,8 @@ jobs:
           --no-watch-fs 
           --stacktrace 
           build
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: docker-compose
+          path: build/bin/native/releaseExecutable/docker-compose-watch.kexe
