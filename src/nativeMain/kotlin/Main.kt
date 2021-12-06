@@ -4,5 +4,5 @@ fun main(args: Array<String>) {
 }
 
 private fun build() = App(
-  DockerComposeShellRunner()
+  DockerComposeExecRunner()
 )
