@@ -26,4 +26,17 @@ kotlin {
       }
     }
   }
+
+  sourceSets {
+    named("commonTest") {
+      dependencies {
+        implementation(kotlin("test"))
+      }
+    }
+    named("nativeTest") {
+      dependencies {
+        implementation(kotlin("test"))
+      }
+    }
+  }
 }
