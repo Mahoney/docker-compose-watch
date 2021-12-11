@@ -16,6 +16,7 @@ restarted.
 * Depends on `fswatch`, you'll need to install that manually
 * Uses compose v2, you'll need to
   [install docker compose v2 manually](https://docs.docker.com/compose/cli-command/#installing-compose-v2)
+  if `docker compose version` doesn't currently work for you.
 
 ## Known weaknesses:
 * It just uses pwd rather than parsing the yaml to decide which contexts to use
