@@ -28,7 +28,7 @@ jobs:
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
       - name: Cache docker
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ runner.temp }}/docker_cache
           # Always want a cache miss on the first build of the day, which should be the scheduled
@@ -55,7 +55,7 @@ jobs:
         working-directory: build
         run: tar -cvf docker-compose-watch-linuxX64-glibc.tar docker-compose
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: docker-compose linuxX64-glibc
           path: build/docker-compose-watch-linuxX64-glibc.tar
@@ -98,7 +98,7 @@ jobs:
           mv bin/native/releaseExecutable/docker-compose-watch.kexe docker-compose
           tar -cvf docker-compose-watch-macosX64.tar docker-compose
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: docker-compose macosX64
           path: build/docker-compose-watch-macosX64.tar
